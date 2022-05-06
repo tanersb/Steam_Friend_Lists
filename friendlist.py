@@ -12,12 +12,7 @@ import SteamObjects
 #unix to stamp
 
 
-#to do
-#her hesap için farklı klasöre kayıt et
-#her ay yıl içi içinde bir kalsöere kayıt et
-#f.writelines(f'Picture: \n')#to doo
-#f.writelines(f'URL: \n')#to doo
-#steam normal linkten 64 id yi çek
+
 
 
 
@@ -46,7 +41,6 @@ def access_friendlist(steamid):
         friend.friend_sinceunix = r.get('friend_since', 0)
 
         friendsList.append(friend)
-
 
     return friendsList
 

@@ -16,6 +16,6 @@ Steam profile URL
 Friend since time
 
 ## To do
--To be able to use the program not only with a steam 64 id, but with any link.
--Converting from normal link to Steam 64 id
--to do lines 237 and 238
+- To be able to use the program not only with a steam 64 id, but with any link.
+- Converting from normal link to Steam 64 id
+- to do lines 237 and 238

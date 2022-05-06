@@ -4,16 +4,14 @@ import urllib.request, urllib.error, urllib.parse
 import datetime
 from datetime import timedelta
 import SteamObjects
+import os
+
 
 
 #!/usr/bin/python
 
-#datetime.datetime.fromtimestamp()
+#datetime.datetime.fromtimestamp(6464564)
 #unix to stamp
-
-
-
-
 
 
 
@@ -76,6 +74,10 @@ def get_user_names(steamids):
         usernames.append(u['personaname'].strip())
 
     return usernames
+
+def totimestamp(dt, epoch=datetime.datetime(1970, 1, 1)):
+    td = dt - epoch
+    return (td.microseconds + (td.seconds + td.days * 86400) * 10 ** 6) / 10 ** 6
 
 
 def get_user_info(steamid):
@@ -169,7 +171,18 @@ username = get_user_name(steamid)
 
 #userFilter = input("Please enter first character of username you'd like to filter or leave empty for all results: ").strip()
 
+
 friendCounter=1
+
+path = 'friends'
+if not os.path.exists(path):
+    os.makedirs(path)
+
+path = os.path.realpath(f'friends/{username}')
+if not os.path.exists(path):
+    os.makedirs(path)
+
+
 for friendObj in friends:
 
 
@@ -181,11 +194,6 @@ for friendObj in friends:
     print(userInfo.steamid + ": " + userInfo.personaname)
     print('Picture: '+ userInfo.avatarfull)
     print("Last logged off: " + str(userInfo.lastlogoff))
-    #print('Time created unix: '+ str(userInfo.timecreatedunix))
-    #print('Persona state flags: '+ str(userInfo.personastateflags))
-    #print('Avatar medium: '+ userInfo.avatarmedium)
-    #print('Primary clan id: '+ userInfo.primaryclanid)
-    #print('avatar: '+ userInfo.avatar)
     print('lastlogoffunix: '+ str(userInfo.lastlogoffunix))
     #print('profilestate: '+ str(userInfo.profilestate))
     print('Visibility state: '+ str(userInfo.communityvisibilitystate))
@@ -196,8 +204,12 @@ for friendObj in friends:
     print("---------------------")
     print()
 
+    unix = totimestamp(datetime.datetime(now.year, now.month, now.day, now.hour, now.minute, now.second))
+    unix=int(unix)
 
-    f = open(f'({now.hour}-{now.minute}-{now.second})-({now.day}-{now.month}-{now.year})-{username}-{len(friends)}.txt','a+',encoding="utf-8")
+    f = open(f'friends/{username}/{username}-{len(friends)}-[{unix}].txt','a+',encoding="utf-8")
+    g = open(f'friends/{username}/{username}-{len(friends)}-[{now.hour}-{now.minute}-{now.second}]-[{now.day}-{now.month}-{now.year}].txt','a+',encoding="utf-8")
+    g.writelines(userInfo.steamid + '\n')
 
     f.writelines(f'{friendCounter}\n')
     try:
@@ -210,6 +222,7 @@ for friendObj in friends:
     f.writelines('Picture: '+ userInfo.avatarfull+ '\n')
     f.writelines('Visibility : '+ str(userInfo.communityvisibilitystate)+ '\n')
     f.writelines("Status: " + userInfo.personastatetext+ '\n')
+    f.writelines("Profile URL: " + f'Link: https://steamcommunity.com/profiles/{userInfo.steamid}/'+'\n')
     f.writelines("Profile URL: " + userInfo.profileurl+ '\n')
     f.writelines("Friend since: " + str(friendObj.friend_since)+ '\n')
     f.writelines("------------------------------------\n")

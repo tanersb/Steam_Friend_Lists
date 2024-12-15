@@ -15,7 +15,7 @@ import os
 
 
 
-key = '028C52FB094CC5AD399D2835C3E97964'
+key = ''
 
 
 
@@ -191,7 +191,12 @@ for friendObj in friends:
     userInfo = get_user_info(friendObj.steamid)
 
     print(friendCounter)
-    print(userInfo.steamid + ": " + userInfo.personaname)
+
+    try:
+        print(userInfo.personaname)
+    except UnicodeEncodeError:
+        print(userInfo.personaname.encode('ascii', 'backslashreplace').decode('ascii'))
+    #print(userInfo.steamid + ": " + userInfo.personaname)
     print('Picture: '+ userInfo.avatarfull)
     print("Last logged off: " + str(userInfo.lastlogoff))
     print('lastlogoffunix: '+ str(userInfo.lastlogoffunix))
@@ -222,7 +227,7 @@ for friendObj in friends:
     f.writelines('Picture: '+ userInfo.avatarfull+ '\n')
     f.writelines('Visibility : '+ str(userInfo.communityvisibilitystate)+ '\n')
     f.writelines("Status: " + userInfo.personastatetext+ '\n')
-    f.writelines("Profile URL: " + f'Link: https://steamcommunity.com/profiles/{userInfo.steamid}/'+'\n')
+    f.writelines("Profile URL: " + f'https://steamcommunity.com/profiles/{userInfo.steamid}/'+'\n')
     f.writelines("Profile URL: " + userInfo.profileurl+ '\n')
     f.writelines("Friend since: " + str(friendObj.friend_since)+ '\n')
     f.writelines("------------------------------------\n")
